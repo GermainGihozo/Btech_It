@@ -36,12 +36,11 @@ pipeline {
     agent any
 
     triggers {
-        // This makes Jenkins run automatically when GitHub changes are pushed
-        pollSCM('* * * * *')   // every 1 minute (or use GitHub webhook)
+        pollSCM('* * * * *')
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
                 checkout scm
             }
@@ -52,8 +51,8 @@ pipeline {
                 script {
                     echo "Checking syntax for index.js..."
 
-                    // This command checks only syntax, no package needed
-                    sh 'node --check index.js'
+                    // Use bat for Windows
+                    bat 'node --check index.js'
                 }
             }
         }
@@ -61,7 +60,7 @@ pipeline {
 
     post {
         success {
-            echo "✔ No syntax errors found in index.js"
+            echo "✔ No syntax errors found."
         }
         failure {
             echo "❌ Syntax error found in index.js"
